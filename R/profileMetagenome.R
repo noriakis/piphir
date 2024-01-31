@@ -1,16 +1,22 @@
 #' profileMetagenome
+#' 
+#' the main workflow
+#' 
+#' @param taxTable taxonomy abundance table
+#' @param copyNumTable 16S copy number table
 #' @param KOTable precalculated KO table
 #' @param blastRes output of alignSequences function (vsearch)
 #' The second column must contain representative taxon ID linked to KO table.
 #' @export
+#' @import dplyr
 #' @return KO profile table
 profileMetagenome <- function(taxTable, copyNumTable, KOTable, blastRes) {
     totalRead <- sum(taxTable)
     # blastRes$V2 <- blastRes$V2 %>% strsplit("\\|") %>% vapply("[", 1, FUN.VALUE="a")
-    ASVs <- blastRes$V1 %>% unique()
+    ASVs <- blastRes[,1] %>% unique()
     hitRes <- lapply(ASVs, function(asv) {
-        tmp <- blastRes[blastRes$V1 == asv, ]
-        hit <- unique(tmp$V2)
+        tmp <- blastRes[blastRes[,1] == asv, ]
+        hit <- unique(tmp[,2])
         list(hit, length(hit))
     })
     names(hitRes) <- ASVs
