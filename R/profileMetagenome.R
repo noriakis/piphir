@@ -3,7 +3,7 @@
 #' the main workflow
 #' 
 #' @param taxTable taxonomy abundance table
-#' @param copyNumTable 16S copy number table
+#' @param copyNumTable 16S copy number table (row.names corresponds to reference tax ID)
 #' @param KOTable precalculated KO table
 #' @param blastRes output of alignSequences function (vsearch)
 #' The second column must contain representative taxon ID linked to KO table.
@@ -45,11 +45,11 @@ profileMetagenome <- function(taxTable, copyNumTable, KOTable, blastRes) {
         group_by(ID) %>%
         summarize_at(1:(ncol(convertTable)-1), sum)
     convertTable$ID <- convertTable$ID %>% unlist()
-    convertTable[["copynum"]] <- copyn[convertTable$ID,]
+    convertTable[["copynum"]] <- copyNumTable[convertTable$ID, 1]
     normalized <- convertTable %>%
         mutate_at(2:(ncol(convertTable)-1), function(x) x / convertTable$copynum)
 
-    keggpSubset <- keggp[normalized$ID, ]
+    keggpSubset <- KOTable[normalized$ID, ]
     keggpSubset[is.na(keggpSubset)] <- 0
     keggpSubset <- as.matrix(keggpSubset)
     normalized$ID <- NULL
