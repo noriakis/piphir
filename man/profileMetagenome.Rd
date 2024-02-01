@@ -9,7 +9,7 @@ profileMetagenome(taxTable, copyNumTable, KOTable, blastRes)
 \arguments{
 \item{taxTable}{taxonomy abundance table}
 
-\item{copyNumTable}{16S copy number table}
+\item{copyNumTable}{16S copy number table (row.names corresponds to reference tax ID)}
 
 \item{KOTable}{precalculated KO table}
 
