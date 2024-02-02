@@ -8,5 +8,5 @@ loadExample <- function() {
     kocn <- readRDS(system.file("extdata", "example_KOCN.rds", package = "piphillinR"))
     blast <- readRDS(system.file("extdata", "example_blast.rds", package = "piphillinR"))
     cn <- readRDS(system.file("extdata", "example_16SCN.rds", package = "piphillinR"))
-    list(cn, kocn, blast, seqtab)
+    list("cn16s"=cn, "cnko"=kocn, "blast"=blast, "seqtab"=seqtab)
 }
