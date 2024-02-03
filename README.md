@@ -1,7 +1,7 @@
 
-# piphillinR
+# piphir
 
-The package performs the functional prediction from 16S rRNA sequencing data by the algorithm in [Piphillin software](https://doi.org/10.1186/s12864-019-6427-1). The other paper is [here](https://doi.org/10.1371/journal.pone.0166104). This implementation referenced the Python implementation, pyphillin.
+The package performs the functional prediction from 16S rRNA sequencing data by the [Piphillin algorithm](https://doi.org/10.1186/s12864-019-6427-1). The original paper is [here](https://doi.org/10.1371/journal.pone.0166104). This implementation referenced the Python implementation, [pyphillin](https://github.com/dmcskim/pyphillin/).
 
 ## Usage
 
