@@ -3,6 +3,13 @@
 
 The package performs the functional prediction from 16S rRNA sequencing data by the [Piphillin algorithm](https://doi.org/10.1186/s12864-019-6427-1). The original paper is [here](https://doi.org/10.1371/journal.pone.0166104). This implementation referenced the Python implementation, [pyphillin](https://github.com/dmcskim/pyphillin/).
 
+
+## Installation
+
+```r
+devtools::install_github("noriakis/piphir")
+```
+
 ## Usage
 
 We first need to compile data we need to use Piphillin algorithm. The pre-computed files are available at [TBU URL](URL).
@@ -24,7 +31,7 @@ res <- profileMetagenome(taxTable, copyNumTable, KOTable, blastRes)
 ## Using example data
 
 ``` r
-library(piphillinR)
+library(piphir)
 ex <- loadExample()
 ex$seqtab
 #>                                                                                                                                                                                                                                                                                                                                                                                                                            sample1
@@ -119,7 +126,14 @@ profileMetagenome(ex$seqtab, ex$cn16s, ex$cnko, ex$blast)
 
 ## Constructing the customized database
 
-If you have KEGG license, it would be relatively easy to construct the database (See the section "Reference databases" in the [original paper](https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-019-6427-1#Sec9)). The 16S sequences are extracted by the KO assignment of `K01977`.
+The precalculated database is build from NCBI RefSeq sequences.
+
+- Proteins and RNA sequences are obtained from the NCBI RefSeq.
+- 16S rRNA gene sequences are extracted, and filtered for the minimum length of 1400 and maximum length of 1600.
+- Proteins were annotated for KEGG ORTHOLOGY number by [KOfamScan](https://github.com/takaram/kofam_scan).
+- 16S rRNA copy number was obtained by the `K01977` ID. It can be from [rrndb](https://rrndb.umms.med.umich.edu/).
+
+If you have KEGG license, it would be relatively easy to construct the database (See the section "Reference databases" in the [original paper](https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-019-6427-1#Sec9)).
 
 ## Comparison with PICRUSt2 (correlation analysis)
 
