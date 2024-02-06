@@ -20,7 +20,7 @@ After downloading, run `alignSequences` function to search the representative se
 After the global alignment is finished, `profileMetagenome` function can be used with the following input.
 
 - ASV or OTU abundance table (typically obtained from DADA2)
-- BLAST results from vsearch (the second column should match the copy number table)
+- BLAST results from vsearch (the second column should match the row names of copy number table)
 - Gene copy number table (typically KEGG ORTHOLOGY)
 - 16S rRNA copy number table
 
@@ -137,4 +137,11 @@ If you have KEGG license, it would be relatively easy to construct the database 
 
 ## Comparison with PICRUSt2 (correlation analysis)
 
-Although the database is different between PICRUSt2 (IMG) and Piphillin (KEGG), we conducted the correlation analysis between the KO abundance table produced by two software.
+Although the database is different between PICRUSt2 (IMG) and Piphillin (KEGG), we conducted the correlation analysis between the KO abundance table produced by two algorithms. The KEGG database is constructed from the database from 2019-08-26. We used the default PICRUSt2 database attached to the package. Here, the `picrust2_ko_metagenome.tsv` is the result from PICRUSt2 using the default parameters. The results comapring with the actual shotgun metagenomic will be available.
+
+
+
+
+
+
+
