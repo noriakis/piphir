@@ -1,7 +1,7 @@
 
 # piphir
 
-The package performs the functional prediction from 16S rRNA sequencing data by the [Piphillin algorithm](https://doi.org/10.1186/s12864-019-6427-1). The original paper is [here](https://doi.org/10.1371/journal.pone.0166104). This implementation referenced the Python implementation, [pyphillin](https://github.com/dmcskim/pyphillin/).
+The package performs the functional prediction from 16S rRNA sequencing data by the [Piphillin algorithm](https://doi.org/10.1186/s12864-019-6427-1). The original paper describing the algorithm is [here](https://doi.org/10.1371/journal.pone.0166104). This implementation referenced the original manuscript and the Python implementation, [pyphillin](https://github.com/dmcskim/pyphillin/).
 
 
 ## Installation
@@ -12,7 +12,7 @@ devtools::install_github("noriakis/piphir")
 
 ## Usage
 
-We first need to compile data we need to use Piphillin algorithm. The pre-computed files are available at [TBU URL](URL).
+We first need to compile data we need to use Piphillin algorithm. The pre-computed files are available at [URL TBU](URL).
 After downloading, run `alignSequences` function to search the representative sequences in the reference 16S sequences. The function needs `vsearch` executable in `PATH` to work. Installation instruction of `vsearch` can be found at the [official repository](https://github.com/torognes/vsearch). The following file is needed.
 
 - Representative sequence of ASV or OTU (.fasta)
