@@ -134,14 +134,3 @@ The precalculated database is build from NCBI RefSeq sequences.
 - 16S rRNA copy number was obtained by the `K01977` ID. It can be from [rrndb](https://rrndb.umms.med.umich.edu/).
 
 If you have KEGG license, it would be relatively easy to construct the database (See the section "Reference databases" in the [original paper](https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-019-6427-1#Sec9)).
-
-## Comparison with PICRUSt2 (correlation analysis)
-
-Although the database is different between PICRUSt2 (IMG) and Piphillin (KEGG), we conducted the correlation analysis between the KO abundance table produced by two algorithms. The KEGG database is constructed from the database from 2019-08-26. We used the default PICRUSt2 database attached to the package. Here, the `picrust2_ko_metagenome.tsv` is the result from PICRUSt2 using the default parameters. The results comapring with the actual shotgun metagenomic will be available.
-
-
-
-
-
-
-
