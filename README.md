@@ -130,7 +130,8 @@ The precalculated database is build from NCBI RefSeq sequences.
 
 - Proteins and RNA sequences are obtained from the NCBI RefSeq.
 - 16S rRNA gene sequences are extracted, and filtered for the minimum length of 1400 and maximum length of 1600.
-- Proteins were annotated for KEGG ORTHOLOGY number by [KOfamScan](https://github.com/takaram/kofam_scan).
+- Proteins were annotated for KEGG ORTHOLOGY number by DIAMOND.
+    - This can be any protein alignment tools, like [KOfamScan](https://github.com/takaram/kofam_scan). [An interesting paper](https://www.biorxiv.org/content/10.1101/2023.11.06.565843v1) is recently published.
 - 16S rRNA copy number was obtained by the `K01977` ID. It can be from [rrndb](https://rrndb.umms.med.umich.edu/).
 
-If you have KEGG license, it would be relatively easy to construct the database (See the section "Reference databases" in the [original paper](https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-019-6427-1#Sec9)).
+If you have KEGG license, it is relatively easy to construct the database (See the section "Reference databases" in the [original paper](https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-019-6427-1#Sec9)).
