@@ -1,5 +1,5 @@
-Package: piphillinR
-Title: Perform piphillin algorithm
+Package: piphir
+Title: Perform Piphillin algorithm
 Version: 0.0.0.9000
 Authors@R: 
     person("Noriaki", "Sato", , "nori@hgc.jp", role = c("aut", "cre"))

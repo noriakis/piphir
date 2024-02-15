@@ -1,0 +1,38 @@
+package:
+  name: r-piphir
+  version: 0.0.0.9000
+
+source:
+  url: file://{{RECIPE_DIR}}/../build/piphir_0.0.0.9000.tar.gz
+
+build:
+  # This is required to make R link correctly on Linux.
+  rpaths:
+    - lib/R/lib/
+    - lib/
+
+
+requirements:
+  build:
+    - r-base
+    - r-dplyr
+
+  run:
+    - r-base
+    - r-dplyr
+
+test:
+  commands:
+    # You can put additional test commands to be run here.
+    - $R -e "library('piphir')"  # [not win]
+    - "\"%R%\" -e \"library('piphir')\""  # [win]
+
+  # You can also put a file called run_test.py, run_test.sh, or run_test.bat
+  # in the recipe that will be run at test time.
+
+  # requires:
+    # Put any additional test requirements here.
+
+about:
+  home: https://github.com/noriakis/piphir
+  license: MIT
