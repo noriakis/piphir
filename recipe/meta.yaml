@@ -3,6 +3,7 @@ package:
   version: 0.0.0.9000
 
 source:
+  fn: piphir_0.0.0.9000.tar.gz
   url: file://{{RECIPE_DIR}}/../build/piphir_0.0.0.9000.tar.gz
 
 build:
