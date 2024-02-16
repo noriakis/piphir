@@ -4,7 +4,7 @@
 \alias{profileMetagenome}
 \title{profileMetagenome}
 \usage{
-profileMetagenome(taxTable, copyNumTable, KOTable, blastRes)
+profileMetagenome(taxTable, copyNumTable, KOTable, blastRes, full = FALSE)
 }
 \arguments{
 \item{taxTable}{taxonomy abundance table}
@@ -15,6 +15,8 @@ profileMetagenome(taxTable, copyNumTable, KOTable, blastRes)
 
 \item{blastRes}{output of alignSequences function (vsearch)
 The second column must contain representative taxon ID linked to KO table.}
+
+\item{full}{return the full output, default to FALSE}
 }
 \value{
 KO profile table

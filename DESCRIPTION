@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: 
     person("Noriaki", "Sato", , "nori@hgc.jp", role = c("aut", "cre"))
 Description: Perform piphillin algorithm
-Imports: dplyr
+Imports: dplyr, tidyr
 Encoding: UTF-8
 License: TBU
 Roxygen: list(markdown = TRUE)

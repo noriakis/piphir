@@ -7,10 +7,11 @@
 #' @param KOTable precalculated KO table
 #' @param blastRes output of alignSequences function (vsearch)
 #' The second column must contain representative taxon ID linked to KO table.
+#' @param full return the full output, default to FALSE
 #' @export
-#' @import dplyr
+#' @import dplyr tidyr
 #' @return KO profile table
-profileMetagenome <- function(taxTable, copyNumTable, KOTable, blastRes) {
+profileMetagenome <- function(taxTable, copyNumTable, KOTable, blastRes, full=FALSE) {
     totalRead <- sum(taxTable)
     # blastRes$V2 <- blastRes$V2 %>% strsplit("\\|") %>% vapply("[", 1, FUN.VALUE="a")
     ASVs <- blastRes[,1] %>% unique()
@@ -48,7 +49,7 @@ profileMetagenome <- function(taxTable, copyNumTable, KOTable, blastRes) {
     convertTable[["copynum"]] <- copyNumTable[convertTable$ID, 1]
     normalized <- convertTable %>%
         mutate_at(2:(ncol(convertTable)-1), function(x) x / convertTable$copynum)
-
+    conv <- data.frame(normalized)
     keggpSubset <- KOTable[normalized$ID, ]
     keggpSubset[is.na(keggpSubset)] <- 0
     keggpSubset <- as.matrix(keggpSubset)
@@ -56,6 +57,22 @@ profileMetagenome <- function(taxTable, copyNumTable, KOTable, blastRes) {
     normalized$copynum <- NULL
     normalized <- as.matrix(normalized)
     normKO <- t(normalized) %*% keggpSubset
-
-    return(normKO)
+    
+    if (!full) {
+	    ret <- t(normKO)
+	    return(ret)	
+    }
+    
+    conv$copynum <- NULL
+    longDf <- tidyr::pivot_longer(conv, 2:ncol(conv)) %>% data.frame()
+    strat <- do.call(rbind, lapply(seq_len(nrow(longDf)), function(rn) {
+    	tmp <- data.frame(keggpSubset[longDf[rn, "ID"], ] * longDf[rn, "value"])
+    	colnames(tmp) <- c("value")
+    	tmp[["ID"]] <- longDf[rn, "ID"]
+    	tmp[["sample"]] <- longDf[rn, "name"]
+    	tmp[["KO"]] <- row.names(tmp)
+    	return(tmp)
+    }))
+    return(tidyr::pivot_wider(strat, names_from=sample))
+    
 }
