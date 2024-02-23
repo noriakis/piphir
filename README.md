@@ -12,8 +12,8 @@ devtools::install_github("noriakis/piphir")
 
 ## Usage
 
-We first need to compile data we need to use Piphillin algorithm. The pre-computed files are available at [URL TBU](URL).
-After downloading, run `alignSequences` function to search the representative sequences in the reference 16S sequences. The function needs `vsearch` executable in `PATH` to work. Installation instruction of `vsearch` can be found at the [official repository](https://github.com/torognes/vsearch). The following file is needed.
+We first need to compile data we need to use Piphillin algorithm. The pre-computed files are available at [here](https://github.com/noriakis/misc/tree/main/piphir/db).
+Run `alignSequences` function to search the representative sequences in the reference 16S sequences. The function needs `vsearch` executable in `PATH` to work. Installation instruction of `vsearch` can be found at the [official repository](https://github.com/torognes/vsearch). The following file is needed.
 
 - Representative sequence of ASV or OTU (.fasta)
 
@@ -122,12 +122,16 @@ profileMetagenome(ex$seqtab, ex$cn16s, ex$cnko, ex$blast)
 
 ## Constructing the customized database
 
-The precalculated database is build from NCBI RefSeq sequences.
+The precalculated database is built from [NCBI RefSeq sequences](https://pubmed.ncbi.nlm.nih.gov/26553804/).
 
 - Proteins and RNA sequences are obtained from the NCBI RefSeq.
 - 16S rRNA gene sequences are extracted, and filtered for the minimum length of 1400 and maximum length of 1600.
 - Proteins were annotated for KEGG ORTHOLOGY number by DIAMOND.
     - This can be any protein alignment tools, like [KOfamScan](https://github.com/takaram/kofam_scan). [An interesting paper](https://www.biorxiv.org/content/10.1101/2023.11.06.565843v1) is recently published.
-- 16S rRNA copy number was obtained by counting the 16S rRNA sequences. It can be from [rrndb](https://rrndb.umms.med.umich.edu/).
+- 16S rRNA gene copy number was obtained by counting the 16S rRNA sequences. It can be from [rrndb](https://rrndb.umms.med.umich.edu/).
 
 If you have KEGG license, it is relatively easy to construct the database (See the section "Reference databases" in the [original paper](https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-019-6427-1#Sec9)).
+
+## Must read
+
+- [Key limitations (from PICRUSt2 wiki)](https://github.com/picrust/picrust2/wiki/Key-Limitations)
