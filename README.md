@@ -12,12 +12,12 @@ devtools::install_github("noriakis/piphir")
 
 ## Usage
 
-We first need to compile data we need to use Piphillin algorithm. The pre-computed files are available at [here](https://github.com/noriakis/misc/tree/main/piphir/db).
-Run `alignSequences` function to search the representative sequences in the reference 16S sequences. The function needs `vsearch` executable in `PATH` to work. Installation instruction of `vsearch` can be found at the [official repository](https://github.com/torognes/vsearch). The following file is needed.
+We first need to compile data we need to use Piphillin algorithm. The pre-computed files are available [here](https://github.com/noriakis/misc/tree/main/piphir/db).
+Run `alignSequences` function to search the representative sequences in the reference 16S sequences (in precalculated data, `16S_seqs.fasta.gz`). The function needs `vsearch` executable in `PATH` to work. Installation instruction of `vsearch` can be found at the [official repository](https://github.com/torognes/vsearch). The following file is needed. Basically `alignSequences` function just calls the `vsearch` with various parameters preset. Note that the number of threads is set to 1 by default. You'll need:
 
 - Representative sequence of ASV or OTU (.fasta)
 
-After the global alignment is finished, `profileMetagenome` function can be used with the following input.
+After the global alignment is finished, you should load the file from `alignSequences`, and `profileMetagenome` function can be used with the following input.
 
 - ASV or OTU abundance table (typically obtained from DADA2)
 - BLAST results from vsearch (the second column should match the row names of copy number table)
@@ -120,6 +120,14 @@ profileMetagenome(ex$seqtab, ex$cn16s, ex$cnko, ex$blast)
 #> K00796  48205.0  6366.25   80.25    81.5  7041.0  32.625
 ```
 
+
+## Using the precalculated database
+
+- 16S_seqs.fasta.gz
+- ko_copynum.tsv.gz
+- 16S_cn.tsv.gz
+
+
 ## Constructing the customized database
 
 The precalculated database is built from [NCBI RefSeq sequences](https://pubmed.ncbi.nlm.nih.gov/26553804/).
@@ -132,6 +140,15 @@ The precalculated database is built from [NCBI RefSeq sequences](https://pubmed.
 
 If you have KEGG license, it is relatively easy to construct the database (See the section "Reference databases" in the [original paper](https://bmcgenomics.biomedcentral.com/articles/10.1186/s12864-019-6427-1#Sec9)).
 
+
+
 ## Must read
 
 - [Key limitations (from PICRUSt2 wiki)](https://github.com/picrust/picrust2/wiki/Key-Limitations)
+
+
+## References
+
+- Narayan NR, Weinmaier T, Laserna-Mendieta EJ, Claesson MJ, Shanahan F, Dabbagh K, Iwai S, DeSantis TZ. Piphillin predicts metagenomic composition and dynamics from DADA2-corrected 16S rDNA sequences. BMC Genomics. 2020 Jan 17;21(1):56. doi: 10.1186/s12864-019-6427-1.
+
+- O'Leary NA, Wright MW, Brister JR, Ciufo S, Haddad D, McVeigh R, Rajput B, Robbertse B, Smith-White B, Ako-Adjei D, Astashyn A, Badretdin A, Bao Y, Blinkova O, Brover V, Chetvernin V, Choi J, Cox E, Ermolaeva O, Farrell CM, Goldfarb T, Gupta T, Haft D, Hatcher E, Hlavina W, Joardar VS, Kodali VK, Li W, Maglott D, Masterson P, McGarvey KM, Murphy MR, O'Neill K, Pujar S, Rangwala SH, Rausch D, Riddick LD, Schoch C, Shkeda A, Storz SS, Sun H, Thibaud-Nissen F, Tolstoy I, Tully RE, Vatsan AR, Wallin C, Webb D, Wu W, Landrum MJ, Kimchi A, Tatusova T, DiCuccio M, Kitts P, Murphy TD, Pruitt KD. Reference sequence (RefSeq) database at NCBI: current status, taxonomic expansion, and functional annotation. Nucleic Acids Res. 2016 Jan 4;44(D1):D733-45. doi: 10.1093/nar/gkv1189.
