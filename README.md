@@ -17,12 +17,16 @@ Run `alignSequences` function to search the representative sequences in the refe
 
 - Representative sequence of ASV or OTU (.fasta)
 
+```r
+alignSequences("rep-seqs.fasta", "16S_seqs.fasta.gz", out="blast.out", pctid=0.99)
+```
+
 After the global alignment is finished, you should load the file from `alignSequences`, and `profileMetagenome` function can be used with the following input.
 
 - ASV or OTU abundance table (typically obtained from DADA2)
 - BLAST results from vsearch (the second column should match the row names of copy number table)
 - Gene copy number table (typically KEGG ORTHOLOGY)
-- 16S rRNA copy number table
+- 16S rRNA gene copy number table
 
 ```r
 res <- profileMetagenome(taxTable, copyNumTable, KOTable, blastRes)
