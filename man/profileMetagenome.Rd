@@ -4,7 +4,15 @@
 \alias{profileMetagenome}
 \title{profileMetagenome}
 \usage{
-profileMetagenome(taxTable, copyNumTable, KOTable, blastRes, full = FALSE)
+profileMetagenome(
+  taxTable,
+  copyNumTable,
+  KOTable,
+  blastRes,
+  full = FALSE,
+  fullOutput = "file",
+  fullTemp = "temporary_full"
+)
 }
 \arguments{
 \item{taxTable}{taxonomy abundance table}
@@ -17,6 +25,10 @@ profileMetagenome(taxTable, copyNumTable, KOTable, blastRes, full = FALSE)
 The second column must contain representative taxon ID linked to KO table.}
 
 \item{full}{return the full output, default to FALSE}
+
+\item{fullOutput}{"file" or "inmemory"}
+
+\item{fullTemp}{if fullOutput is "file", {{fileTemp}}.txt will be created.}
 }
 \value{
 KO profile table

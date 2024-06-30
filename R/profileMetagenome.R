@@ -8,10 +8,14 @@
 #' @param blastRes output of alignSequences function (vsearch)
 #' The second column must contain representative taxon ID linked to KO table.
 #' @param full return the full output, default to FALSE
+#' @param fullOutput "file" or "inmemory"
+#' @param fullTemp if fullOutput is "file", {{fileTemp}}.txt will be created.
+#' @param fullID subset to this ID in full mode, when the data size is large.
 #' @export
 #' @import dplyr tidyr
 #' @return KO profile table
-profileMetagenome <- function(taxTable, copyNumTable, KOTable, blastRes, full=FALSE) {
+profileMetagenome <- function(taxTable, copyNumTable, KOTable, blastRes, full=FALSE,
+    fullOutput="file", fullTemp="temporary_full", fullID=NULL) {
     totalRead <- sum(taxTable)
     # blastRes$V2 <- blastRes$V2 %>% strsplit("\\|") %>% vapply("[", 1, FUN.VALUE="a")
     ASVs <- blastRes[,1] %>% unique()
@@ -64,15 +68,46 @@ profileMetagenome <- function(taxTable, copyNumTable, KOTable, blastRes, full=FA
     }
     
     conv$copynum <- NULL
+
     longDf <- tidyr::pivot_longer(conv, 2:ncol(conv)) %>% data.frame()
-    strat <- do.call(rbind, lapply(seq_len(nrow(longDf)), function(rn) {
-    	tmp <- data.frame(keggpSubset[longDf[rn, "ID"], ] * longDf[rn, "value"])
-    	colnames(tmp) <- c("value")
-    	tmp[["ID"]] <- longDf[rn, "ID"]
-    	tmp[["sample"]] <- longDf[rn, "name"]
-    	tmp[["KO"]] <- row.names(tmp)
-    	return(tmp)
-    }))
-    return(tidyr::pivot_wider(strat, names_from=sample))
-    
+    # Cannot handle this big size data in memory
+    if (fullOutput=="inmemory") {
+        strat <- do.call(rbind, lapply(seq_len(nrow(longDf)), function(rn) {
+            kos <- names(keggpSubset[longDf[rn, "ID"], ])
+            if (!is.null(fullID)) {
+                if (length(intersect(fullID, kos))>=1) {} else {return(NULL)}
+            }
+            tmp <- data.frame(keggpSubset[longDf[rn, "ID"], ] * longDf[rn, "value"])
+            colnames(tmp) <- c("value")
+            tmp[["ID"]] <- longDf[rn, "ID"]
+            tmp[["sample"]] <- longDf[rn, "name"]
+            tmp[["KO"]] <- row.names(tmp)
+            if (!is.null(fullID)) {
+                if (length(intersect(fullID, tmp$KO))>=1) {} else {return(NULL)}
+            }
+            return(tmp)
+        }))
+        if (is.null(strat)) {stop("No KO profiled.")}
+        return(tidyr::pivot_wider(strat, names_from=sample))     
+    } else {
+        fileName <- paste0(fullTemp, ".txt")
+        if (file.exists(fileName)) {stop("File exists!")}
+        lapply(seq_len(nrow(longDf)), function(rn) {
+
+          tmp <- data.frame(keggpSubset[longDf[rn, "ID"], ] * longDf[rn, "value"])
+          colnames(tmp) <- c("value")
+          tmp[["ID"]] <- longDf[rn, "ID"]
+          tmp[["sample"]] <- longDf[rn, "name"]
+          tmp[["KO"]] <- row.names(tmp)
+          tmp <- tmp[tmp[["value"]]!=0, ]
+
+          if (!is.null(fullID)) {
+            if (length(intersect(fullID, tmp$KO))>=1) {} else {return(NULL)}
+          }         
+          write.table(tmp, fileName, col.names = !file.exists(fileName), sep="\t", append=TRUE,
+            quote=FALSE, row.names=FALSE)
+          return(0)
+        })
+        return(fileName)
+    }
 }
