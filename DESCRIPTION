@@ -1,6 +1,6 @@
 Package: piphir
 Title: Perform Piphillin algorithm
-Version: 0.0.0.9000
+Version: 0.0.0.9100
 Authors@R: 
     person("Noriaki", "Sato", , "nori@hgc.jp", role = c("aut", "cre"))
 Description: Perform piphillin algorithm
