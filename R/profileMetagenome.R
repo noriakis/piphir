@@ -12,12 +12,12 @@
 #' @param fullTemp if fullOutput is "file", {{fileTemp}}.txt will be created.
 #' @param fullID subset to this ID in full mode, when the data size is large.
 #' @param forceCalc force calculation when the index of normalized hit table and
-#' KO copy number table does not match.
+#' KO copy number table does not match, by removing blast hits that not in CN table.
 #' @export
 #' @import dplyr tidyr
 #' @return KO profile table
 profileMetagenome <- function(taxTable, copyNumTable, KOTable, blastRes, full=FALSE,
-    fullOutput="file", fullTemp="temporary_full", fullID=NULL, forceCalc=FALSE) {
+    fullOutput="file", fullTemp="temporary_full", fullID=NULL, forceCalc=TRUE) {
     totalRead <- sum(taxTable)
     # blastRes$V2 <- blastRes$V2 %>% strsplit("\\|") %>% vapply("[", 1, FUN.VALUE="a")
     ASVs <- blastRes[,1] %>% unique()
@@ -57,7 +57,6 @@ profileMetagenome <- function(taxTable, copyNumTable, KOTable, blastRes, full=FA
         mutate_at(2:(ncol(convertTable)-1), function(x) x / convertTable$copynum)
     conv <- data.frame(normalized)
     if (forceCalc) {
-        cat("Forcing calculation ...\n")
         nonnaID <- normalized[!is.na(normalized$copynum), ]$ID
         forceID <- intersect(row.names(KOTable), nonnaID)
         KOTable <- KOTable[forceID, ]

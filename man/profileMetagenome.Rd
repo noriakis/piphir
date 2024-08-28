@@ -13,7 +13,7 @@ profileMetagenome(
   fullOutput = "file",
   fullTemp = "temporary_full",
   fullID = NULL,
-  forceCalc = FALSE
+  forceCalc = TRUE
 )
 }
 \arguments{
@@ -35,7 +35,7 @@ The second column must contain representative taxon ID linked to KO table.}
 \item{fullID}{subset to this ID in full mode, when the data size is large.}
 
 \item{forceCalc}{force calculation when the index of normalized hit table and
-KO copy number table does not match.}
+KO copy number table does not match, by removing blast hits that not in CN table.}
 }
 \value{
 KO profile table
