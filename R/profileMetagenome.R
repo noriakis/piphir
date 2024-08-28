@@ -11,11 +11,13 @@
 #' @param fullOutput "file" or "inmemory"
 #' @param fullTemp if fullOutput is "file", {{fileTemp}}.txt will be created.
 #' @param fullID subset to this ID in full mode, when the data size is large.
+#' @param forceCalc force calculation when the index of normalized hit table and
+#' KO copy number table does not match.
 #' @export
 #' @import dplyr tidyr
 #' @return KO profile table
 profileMetagenome <- function(taxTable, copyNumTable, KOTable, blastRes, full=FALSE,
-    fullOutput="file", fullTemp="temporary_full", fullID=NULL) {
+    fullOutput="file", fullTemp="temporary_full", fullID=NULL, forceCalc=FALSE) {
     totalRead <- sum(taxTable)
     # blastRes$V2 <- blastRes$V2 %>% strsplit("\\|") %>% vapply("[", 1, FUN.VALUE="a")
     ASVs <- blastRes[,1] %>% unique()
@@ -54,7 +56,19 @@ profileMetagenome <- function(taxTable, copyNumTable, KOTable, blastRes, full=FA
     normalized <- convertTable %>%
         mutate_at(2:(ncol(convertTable)-1), function(x) x / convertTable$copynum)
     conv <- data.frame(normalized)
-    keggpSubset <- KOTable[normalized$ID, ]
+    if (forceCalc) {
+        cat("Forcing calculation ...\n")
+        nonnaID <- normalized[!is.na(normalized$copynum), ]$ID
+        forceID <- intersect(row.names(KOTable), nonnaID)
+        KOTable <- KOTable[forceID, ]
+        normalized <- normalized %>% data.frame() %>% `row.names<-`(.[["ID"]])
+        normalized <- normalized[forceID, ]
+        keggpSubset <- KOTable[normalized$ID, ]
+        row.names(conv) <- conv$ID
+        conv <- conv[forceID, ]
+    } else {
+        keggpSubset <- KOTable[normalized$ID, ]
+    }
     keggpSubset[is.na(keggpSubset)] <- 0
     keggpSubset <- as.matrix(keggpSubset)
     normalized$ID <- NULL
