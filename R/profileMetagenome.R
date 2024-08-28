@@ -37,7 +37,7 @@ profileMetagenome <- function(taxTable, copyNumTable, KOTable, blastRes, full=FA
     # Divide ASV read count by number of top vsearch hits
     divided <- hitTaxTable / asvCount[row.names(hitTaxTable)]
     
-    ## Make taxa / abundance table for RefSeq
+    ## Make taxa / abundance table
     convertTable <- do.call(rbind, lapply(row.names(divided), function(asv) {
         do.call(rbind, lapply(hitRes[[asv]][[1]], function(taxa) {
             c(divided[asv,], taxa)
@@ -52,22 +52,27 @@ profileMetagenome <- function(taxTable, copyNumTable, KOTable, blastRes, full=FA
         group_by(ID) %>%
         summarize_at(1:(ncol(convertTable)-1), sum)
     convertTable$ID <- convertTable$ID %>% unlist()
+    
+    if (forceCalc) {
+        cat("GF table:", dim(KOTable)[1],
+            "CN table:", dim(copyNumTable)[1],
+            "16S hits:", length(convertTable$ID), "\n")
+        forceID <- Reduce(intersect,
+            list(row.names(KOTable), row.names(copyNumTable), convertTable$ID))
+        cat("Intersection:", length(forceID), "\n")
+        KOTable <- KOTable[forceID, ]
+        copyNumTable[["ID"]] <- row.names(copyNumTable)
+        copyNumTable <- copyNumTable %>% filter(ID %in% forceID)
+        convertTable <- convertTable %>% filter(ID %in% forceID)
+    }
+    
     convertTable[["copynum"]] <- copyNumTable[convertTable$ID, 1]
     normalized <- convertTable %>%
         mutate_at(2:(ncol(convertTable)-1), function(x) x / convertTable$copynum)
     conv <- data.frame(normalized)
-    if (forceCalc) {
-        nonnaID <- normalized[!is.na(normalized$copynum), ]$ID
-        forceID <- intersect(row.names(KOTable), nonnaID)
-        KOTable <- KOTable[forceID, ]
-        normalized <- normalized %>% data.frame() %>% `row.names<-`(.[["ID"]])
-        normalized <- normalized[forceID, ]
-        keggpSubset <- KOTable[normalized$ID, ]
-        row.names(conv) <- conv$ID
-        conv <- conv[forceID, ]
-    } else {
-        keggpSubset <- KOTable[normalized$ID, ]
-    }
+
+    keggpSubset <- KOTable[normalized$ID, ]
+    
     keggpSubset[is.na(keggpSubset)] <- 0
     keggpSubset <- as.matrix(keggpSubset)
     normalized$ID <- NULL
